@@ -21,9 +21,19 @@ void votar(celulaCandidato *p) // Utilizar um if para verificar se tem um candid
     printf("\nA Fazer - votar");
 }
 
-void relatorio(celulaCandidato *p)
+void relatorio(celulaCandidato *le)
 {
-    printf("\nA Fazer - relatorio");
+    celulaCandidato *p;
+    int votosTotais = 0;
+    for (p = le->prox; p != NULL; p = p->prox)
+    {
+        votosTotais += p->numeroVotos;
+
+        printf("\nNome Candidato: %s", p->nomeCandidato);
+        printf("\nNumero Candidato: %d", p->numeroCandidato);
+        printf("\nNumero de votos: %d\n", p->numeroVotos);
+    }
+    printf("\n\nTotal de votos: %d", votosTotais);
 }
 
 void menu(celulaCandidato *p)
