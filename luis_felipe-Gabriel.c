@@ -28,25 +28,23 @@ void adicionarCandidato(celulaCandidato *p)
 
     // Logica de inserção
     nova->numeroCandidato = numeroCandidato;
-    nova->numeroVotos = 0;
+    nova->numeroVotos = 10;
     nova->prox = p->prox;
     p->prox = nova;
 }
 
 void alterarCandidato(celulaCandidato *p)
 {
-    // int numeroCandidato;
+    int numeroCandidato;
 
-    // printf("\nNome do Candidato: ");
-    // getchar();
-    // gets(p->nomeCandidato);
+    printf("\nNome do Candidato: ");
+    getchar();
+    gets(p->nomeCandidato);
 
-    // printf("Numero do Candidato: ");
-    // scanf("%d", &numeroCandidato);
+    printf("Numero do Candidato: ");
+    scanf("%d", &numeroCandidato);
 
-    // // Logica de inserção
-    // p->numeroCandidato = numeroCandidato;
-    printf("Fazer alterarCandidato");
+    p->numeroCandidato = numeroCandidato;
 }
 
 void removerCandidato(int y, celulaCandidato *le)
@@ -75,7 +73,7 @@ void menuRemoverPresidente(celulaCandidato *p)
     removerCandidato(seletor, p);
 }
 
-void crudPresidente(celulaCandidato *p)
+void crudCandidato(celulaCandidato *p)
 {
     int seletor;
     printf("\n|| 1 - inserir || 2 - alterar || 3 - excluir || Outro - Menu anterior ||\n");
@@ -84,17 +82,17 @@ void crudPresidente(celulaCandidato *p)
     {
     case 1:
         adicionarCandidato(p);
-        crudPresidente(p);
+        crudCandidato(p);
         break;
 
     case 2:
         alterarCandidato(p);
-        crudPresidente(p);
+        crudCandidato(p);
         break;
 
     case 3:
         menuRemoverPresidente(p);
-        crudPresidente(p);
+        crudCandidato(p);
         break;
 
     default:
@@ -102,7 +100,7 @@ void crudPresidente(celulaCandidato *p)
     }
 }
 
-void menuCandidato(celulaCandidato *p)
+void menuCandidato(celulaCandidato *presidente, celulaCandidato *governador, celulaCandidato *senador)
 {
     int seletor;
     printf("\n|| 1 - Presidente || 2 - Governador || 3 - Senador || Outro - Menu anterior ||\n");
@@ -110,8 +108,16 @@ void menuCandidato(celulaCandidato *p)
     switch (seletor)
     {
     case 1:
-        crudPresidente(p);
-        menuCandidato(p);
+        crudCandidato(presidente);
+        menuCandidato(presidente, governador, senador);
+        break;
+    case 2:
+        crudCandidato(governador);
+        menuCandidato(presidente, governador, senador);
+        break;
+    case 3:
+        crudCandidato(senador);
+        menuCandidato(presidente, governador, senador);
         break;
 
     default:
@@ -124,49 +130,66 @@ void votar(celulaCandidato *p) // Utilizar um if para verificar se tem um candid
     printf("\nA Fazer - votar");
 }
 
-void relatorio(celulaCandidato *le)
+void relatorioGeral(celulaCandidato *le)
 {
     celulaCandidato *p;
     int votosTotais = 0;
     for (p = le->prox; p != NULL; p = p->prox)
     {
         votosTotais += p->numeroVotos;
-
-        printf("\nNome Candidato: %s", p->nomeCandidato);
-        printf("\nNumero Candidato: %d", p->numeroCandidato);
-        printf("\nNumero de votos: %d\n", p->numeroVotos);
     }
-    printf("\n\nTotal de votos: %d", votosTotais);
+
+    if (votosTotais >= 0)
+    {
+        printf("\n\nTotal de votos: %d", votosTotais);
+        for (p = le->prox; p != NULL; p = p->prox)
+        {
+            printf("\nNome Candidato: %s", p->nomeCandidato);
+            printf("\nNumero Candidato: %d", p->numeroCandidato);
+            printf("\nPorcentagem de votos: %.2f %c\n", (p->numeroVotos / votosTotais) * 100, 37);
+        }
+    }
 }
 
-void menu(celulaCandidato *p)
+void relatorio(celulaCandidato *presidente, celulaCandidato *governador, celulaCandidato *senador)
+{
+    relatorioGeral(presidente);
+    relatorioGeral(governador);
+    relatorioGeral(senador);
+}
+
+void menu(celulaCandidato *presidente, celulaCandidato *governador, celulaCandidato *senador)
 {
     int seletor;
-    printf("\n|| 1 - Adicionar Candidatos || 2 - Votar || Outro - Sair e mostrar relatorio ||\n");
+    printf("\n|| 1 - Gerenciar Candidatos || 2 - Votar nos candidatos || Outro - Sair e mostrar relatorio ||\n");
     scanf("%d", &seletor);
     switch (seletor)
     {
     case 1:
-        menuCandidato(p);
-        menu(p);
+        menuCandidato(presidente, governador, senador);
+        menu(presidente, governador, senador);
         break;
 
     case 2:
-        votar(p);
-        menu(p);
+        votar(presidente);
+        menu(presidente, governador, senador);
         break;
 
     default:
-        relatorio(p);
+        relatorio(presidente, governador, senador);
         break;
     }
 }
 
 int main()
 {
-    celulaCandidato *p = malloc(sizeof(celulaCandidato));
-    p->prox = NULL;
+    celulaCandidato *presidente = malloc(sizeof(celulaCandidato));
+    celulaCandidato *governador = malloc(sizeof(celulaCandidato));
+    celulaCandidato *senador = malloc(sizeof(celulaCandidato));
+    presidente->prox = NULL;
+    governador->prox = NULL;
+    senador->prox = NULL;
 
-    menu(p);
+    menu(presidente, governador, senador);
     return 0;
 }
