@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+struct estruturaCandidato
+{
+    int numeroCandidato;
+    char nomeCandidato[20];
+    int numeroVotos;
+    struct estrutura *prox;
+};
+
+typedef struct estrutura celulaCandidato;
+
 void adicionarCandidato()
 {
     printf("\nA Fazer - Candidato");
@@ -16,7 +26,7 @@ void relatorio()
     printf("\nA Fazer - relatorio");
 }
 
-void menu()
+void menu(celulaCandidato *p)
 {
     int seletor;
     printf("\n|| 1 - Adicionar Candidadtos || 2 - Votar || Outro - Sair e mostrar relatorio ||\n");
@@ -25,12 +35,12 @@ void menu()
     {
     case 1:
         adicionarCandidato();
-        menu();
+        menu(p);
         break;
 
     case 2:
         votar();
-        menu();
+        menu(p);
         break;
 
     default:
@@ -41,7 +51,8 @@ void menu()
 
 int main()
 {
-    menu();
+    celulaCandidato *p = malloc(sizeof(celulaCandidato *));
+    menu(p);
 
     return 0;
 }
