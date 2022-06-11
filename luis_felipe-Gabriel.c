@@ -40,7 +40,7 @@ void relatorio(celulaCandidato *le)
 void menu(celulaCandidato *p)
 {
     int seletor;
-    printf("\n|| 1 - Adicionar Candidadtos || 2 - Votar || Outro - Sair e mostrar relatorio ||\n");
+    printf("\n|| 1 - Adicionar Candidatos || 2 - Votar || Outro - Sair e mostrar relatorio ||\n");
     scanf("%d", &seletor);
     switch (seletor)
     {
