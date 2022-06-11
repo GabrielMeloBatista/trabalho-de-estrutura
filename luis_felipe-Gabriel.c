@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define tamanhoNome 20
 
 struct estruturaCandidato
 {
     int numeroCandidato;
-    char nomeCandidato[20];
+    char nomeCandidato[tamanhoNome];
     int numeroVotos;
     struct estruturaCandidato *prox;
 };
 
-typedef struct estrutura celulaCandidato;
+typedef struct estruturaCandidato celulaCandidato;
 
 void adicionarCandidato(celulaCandidato *p)
 {
