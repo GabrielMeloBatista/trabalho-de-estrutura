@@ -11,17 +11,17 @@ struct estruturaCandidato
 
 typedef struct estrutura celulaCandidato;
 
-void adicionarCandidato()
+void adicionarCandidato(celulaCandidato *p)
 {
     printf("\nA Fazer - Candidato");
 }
 
-void votar()
+void votar(celulaCandidato *p)
 {
     printf("\nA Fazer - votar");
 }
 
-void relatorio()
+void relatorio(celulaCandidato *p)
 {
     printf("\nA Fazer - relatorio");
 }
@@ -34,17 +34,17 @@ void menu(celulaCandidato *p)
     switch (seletor)
     {
     case 1:
-        adicionarCandidato();
+        adicionarCandidato(p);
         menu(p);
         break;
 
     case 2:
-        votar();
+        votar(p);
         menu(p);
         break;
 
     default:
-        relatorio();
+        relatorio(p);
         break;
     }
 }
