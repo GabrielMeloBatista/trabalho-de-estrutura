@@ -6,7 +6,7 @@ struct estruturaCandidato
     int numeroCandidato;
     char nomeCandidato[20];
     int numeroVotos;
-    struct estrutura *prox;
+    struct estruturaCandidato *prox;
 };
 
 typedef struct estrutura celulaCandidato;
@@ -16,7 +16,7 @@ void adicionarCandidato(celulaCandidato *p)
     printf("\nA Fazer - Candidato");
 }
 
-void votar(celulaCandidato *p)
+void votar(celulaCandidato *p) // Utilizar um if para verificar se tem um candidato
 {
     printf("\nA Fazer - votar");
 }
