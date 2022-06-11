@@ -53,6 +53,5 @@ int main()
 {
     celulaCandidato *p = malloc(sizeof(celulaCandidato *));
     menu(p);
-
     return 0;
 }
