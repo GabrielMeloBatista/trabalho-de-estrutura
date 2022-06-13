@@ -33,18 +33,46 @@ void adicionarCandidato(celulaCandidato *p)
     p->prox = nova;
 }
 
-void alterarCandidato(celulaCandidato *p)
+void alterarCandidato(int y, celulaCandidato *le)
 {
     int numeroCandidato;
+    celulaCandidato *p, *q, *nova;
+    nova = malloc(sizeof(celulaCandidato));
+    /* Logica dados novos aqui */
 
     printf("\nNome do Candidato: ");
     getchar();
-    gets(p->nomeCandidato);
+    gets(nova->nomeCandidato);
 
     printf("Numero do Candidato: ");
     scanf("%d", &numeroCandidato);
 
-    p->numeroCandidato = numeroCandidato;
+    nova->numeroCandidato = numeroCandidato;
+    nova->numeroVotos = 0;
+
+    p = le;
+    q = le->prox;
+    while (q != NULL && q->numeroCandidato != y)
+    {
+        p = q;
+        q = q->prox;
+    }
+    if (q != NULL)
+    {
+        p->prox = q->prox;
+        free(q);
+    }
+    nova->prox = q;
+    p->prox = nova;
+}
+
+void menuAlterarCandidato(celulaCandidato *p)
+{
+    int seletor;
+    printf("numero do candidato a ser alterado: ");
+    scanf("%d", &seletor);
+
+    alterarCandidato(seletor, p);
 }
 
 void removerCandidato(int y, celulaCandidato *le)
@@ -86,7 +114,7 @@ void crudCandidato(celulaCandidato *p)
         break;
 
     case 2:
-        alterarCandidato(p);
+        menuAlterarCandidato(p);
         crudCandidato(p);
         break;
 
