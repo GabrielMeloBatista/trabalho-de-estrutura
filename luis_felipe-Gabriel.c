@@ -28,7 +28,7 @@ void adicionarCandidato(celulaCandidato *p)
 
     // Logica de inserção
     nova->numeroCandidato = numeroCandidato;
-    nova->numeroVotos = 10;
+    nova->numeroVotos = 0;
     nova->prox = p->prox;
     p->prox = nova;
 }
