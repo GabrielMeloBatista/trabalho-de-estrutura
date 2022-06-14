@@ -28,7 +28,7 @@ void adicionarCandidato(celula *p)
 
     // Logica de inserção
     nova->numeroCandidato = numeroCandidato;
-    nova->numeroVotos = 0;
+    nova->numeroVotos = 45;
     nova->prox = p->prox;
     p->prox = nova;
 }
@@ -48,7 +48,7 @@ void alterarCandidato(int y, celula *le)
     scanf("%d", &numeroCandidato);
 
     nova->numeroCandidato = numeroCandidato;
-    nova->numeroVotos = 1;
+    nova->numeroVotos = 0;
 
     p = le;
     q = le->prox;
@@ -198,29 +198,29 @@ void votar(celula *presidente, celula *governador, celula *senador)
 
 int contarVotos(celula *le)
 {
-    celula *p;
-    int votosTotais = 0;
-    for (p = le->prox; p != NULL; p = p->prox)
+    le = le->prox;
+    if (le != NULL)
     {
-        votosTotais += p->numeroVotos;
+        return le->numeroVotos + contarVotos(le);
     }
-    return votosTotais;
 }
-
 
 void relatorioGeral(celula *le)
 {
     celula *p;
+    double porcentagem;
     int votosTotais = contarVotos(le);
-    if (votosTotais >= 0)
+    if (votosTotais > 0)
     {
         printf("\n\nTotal de votos: %d", votosTotais);
     }
     for (p = le->prox; p != NULL; p = p->prox)
     {
+        porcentagem = (p->numeroVotos / votosTotais) * 100;
         printf("\nNome Candidato: %s", p->nomeCandidato);
         printf("\nNumero Candidato: %d", p->numeroCandidato);
-        printf("\nPorcentagem de votos: %.2f %c\n", (p->numeroVotos / votosTotais) * 100, 37);
+        // FIXME Concerte a porcentagem
+        printf("\nPorcentagem de votos: %.2f %c\n", porcentagem, 37);
     }
 }
 
@@ -264,7 +264,5 @@ int main()
     senador->prox = NULL;
 
     menu(presidente, governador, senador);
-
-    printf("Fechou");
     return 0;
 }
