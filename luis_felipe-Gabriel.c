@@ -10,14 +10,14 @@ struct estruturaCandidato
     struct estruturaCandidato *prox;
 };
 
-typedef struct estruturaCandidato celulaCandidato;
+typedef struct estruturaCandidato celula;
 
-void adicionarCandidato(celulaCandidato *p)
+void adicionarCandidato(celula *p)
 {
-    celulaCandidato *nova;
     int numeroCandidato;
+    celula *nova;
 
-    nova = malloc(sizeof(celulaCandidato));
+    nova = malloc(sizeof(celula));
 
     printf("\nNome do Candidato: ");
     getchar();
@@ -33,11 +33,11 @@ void adicionarCandidato(celulaCandidato *p)
     p->prox = nova;
 }
 
-void alterarCandidato(int y, celulaCandidato *le)
+void alterarCandidato(int y, celula *le)
 {
     int numeroCandidato;
-    celulaCandidato *p, *q, *nova;
-    nova = malloc(sizeof(celulaCandidato));
+    celula *p, *q, *nova;
+    nova = malloc(sizeof(celula));
     /* Logica dados novos aqui */
 
     printf("\nNome do Candidato: ");
@@ -48,7 +48,7 @@ void alterarCandidato(int y, celulaCandidato *le)
     scanf("%d", &numeroCandidato);
 
     nova->numeroCandidato = numeroCandidato;
-    nova->numeroVotos = 0;
+    nova->numeroVotos = 1;
 
     p = le;
     q = le->prox;
@@ -66,7 +66,7 @@ void alterarCandidato(int y, celulaCandidato *le)
     p->prox = nova;
 }
 
-void menuAlterarCandidato(celulaCandidato *p)
+void menuAlterarCandidato(celula *p)
 {
     int seletor;
     printf("numero do candidato a ser alterado: ");
@@ -75,9 +75,9 @@ void menuAlterarCandidato(celulaCandidato *p)
     alterarCandidato(seletor, p);
 }
 
-void removerCandidato(int y, celulaCandidato *le)
+void removerCandidato(int y, celula *le)
 {
-    celulaCandidato *p, *q;
+    celula *p, *q;
     p = le;
     q = le->prox;
     while (q != NULL && q->numeroCandidato != y)
@@ -92,7 +92,7 @@ void removerCandidato(int y, celulaCandidato *le)
     }
 }
 
-void menuRemoverPresidente(celulaCandidato *p)
+void menuRemoverPresidente(celula *p)
 {
     int seletor;
     printf("numero do candidato a ser removido: ");
@@ -101,7 +101,7 @@ void menuRemoverPresidente(celulaCandidato *p)
     removerCandidato(seletor, p);
 }
 
-void crudCandidato(celulaCandidato *p)
+void crudCandidato(celula *p)
 {
     int seletor;
     printf("\n|| 1 - inserir || 2 - alterar || 3 - excluir || Outro - Menu anterior ||\n");
@@ -128,7 +128,7 @@ void crudCandidato(celulaCandidato *p)
     }
 }
 
-void menuCandidato(celulaCandidato *presidente, celulaCandidato *governador, celulaCandidato *senador)
+void menuCandidato(celula *presidente, celula *governador, celula *senador)
 {
     int seletor;
     printf("\n|| 1 - Presidente || 2 - Governador || 3 - Senador || Outro - Menu anterior ||\n");
@@ -153,40 +153,85 @@ void menuCandidato(celulaCandidato *presidente, celulaCandidato *governador, cel
     }
 }
 
-void votar(celulaCandidato *p) // Utilizar um if para verificar se tem um candidato
+// Função para mostrar os candidatos.
+void imprime(celula *le)
 {
-    printf("\nA Fazer - votar");
+    le = le->prox;
+    if (le != NULL)
+    {
+        printf("\nNome do Candidato: %s\n", le->nomeCandidato);
+        printf("Numero do Candidato: %d\n", le->numeroCandidato);
+        imprime(le);
+    }
 }
 
-void relatorioGeral(celulaCandidato *le)
+void votarCandidato(celula *le) // Utilizar um if para verificar se tem um candidato
 {
-    celulaCandidato *p;
+    // Botão para sair da função
+    celula *p, *q;
+    int voto;
+    imprime(le);
+
+    printf("Digite aqui seu voto para Presidente\n");
+    scanf("%d", &voto);
+
+    p = le;
+    q = le->prox;
+    while (q != NULL)
+    {
+
+        if (voto == p->numeroCandidato)
+        {
+            printf("Seu voto foi para %s\n", p->nomeCandidato);
+        }
+        p = q;
+        q = q->prox;
+    }
+}
+
+void votar(celula *presidente, celula *governador, celula *senador)
+{
+    votarCandidato(presidente);
+    votarCandidato(governador);
+    votarCandidato(senador);
+}
+
+int contarVotos(celula *le)
+{
+    celula *p;
     int votosTotais = 0;
     for (p = le->prox; p != NULL; p = p->prox)
     {
         votosTotais += p->numeroVotos;
     }
+    return votosTotais;
+}
 
+
+void relatorioGeral(celula *le)
+{
+    celula *p;
+    int votosTotais = contarVotos(le);
     if (votosTotais >= 0)
     {
         printf("\n\nTotal de votos: %d", votosTotais);
-        for (p = le->prox; p != NULL; p = p->prox)
-        {
-            printf("\nNome Candidato: %s", p->nomeCandidato);
-            printf("\nNumero Candidato: %d", p->numeroCandidato);
-            printf("\nPorcentagem de votos: %.2f %c\n", (p->numeroVotos / votosTotais) * 100, 37);
-        }
+    }
+    for (p = le->prox; p != NULL; p = p->prox)
+    {
+        printf("\nNome Candidato: %s", p->nomeCandidato);
+        printf("\nNumero Candidato: %d", p->numeroCandidato);
+        printf("\nPorcentagem de votos: %.2f %c\n", (p->numeroVotos / votosTotais) * 100, 37);
     }
 }
 
-void relatorio(celulaCandidato *presidente, celulaCandidato *governador, celulaCandidato *senador)
+void relatorio(celula *presidente, celula *governador, celula *senador)
 {
     relatorioGeral(presidente);
     relatorioGeral(governador);
     relatorioGeral(senador);
 }
 
-void menu(celulaCandidato *presidente, celulaCandidato *governador, celulaCandidato *senador)
+void menu(celula *presidente, celula *governador, celula *senador)
 {
     int seletor;
     printf("\n|| 1 - Gerenciar Candidatos || 2 - Votar nos candidatos || Outro - Sair e mostrar relatorio ||\n");
@@ -199,7 +244,7 @@ void menu(celulaCandidato *presidente, celulaCandidato *governador, celulaCandid
         break;
 
     case 2:
-        votar(presidente);
+        votar(presidente, governador, senador);
         menu(presidente, governador, senador);
         break;
 
@@ -211,13 +256,15 @@ void menu(celulaCandidato *presidente, celulaCandidato *governador, celulaCandid
 
 int main()
 {
-    celulaCandidato *presidente = malloc(sizeof(celulaCandidato));
-    celulaCandidato *governador = malloc(sizeof(celulaCandidato));
-    celulaCandidato *senador = malloc(sizeof(celulaCandidato));
+    celula *presidente = malloc(sizeof(celula));
+    celula *governador = malloc(sizeof(celula));
+    celula *senador = malloc(sizeof(celula));
     presidente->prox = NULL;
     governador->prox = NULL;
     senador->prox = NULL;
 
     menu(presidente, governador, senador);
+
+    printf("Fechou");
     return 0;
 }
