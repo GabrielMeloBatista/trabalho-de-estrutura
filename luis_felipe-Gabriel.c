@@ -244,7 +244,14 @@ void relatorioGeral(celula *le)
     celula *p, *q;
     p = le, q = le;
     int votosTotais = contarVotos(p);
-    printf("\n\nTotal de votos: %d", votosTotais);
+    if (votosTotais <= 0)
+    {
+        printf("Nao a votos");
+    }
+    else
+    {
+        printf("\n\nTotal de votos: %d", votosTotais);
+    }
     imprimeRelatorio(q, votosTotais);
 }
 
