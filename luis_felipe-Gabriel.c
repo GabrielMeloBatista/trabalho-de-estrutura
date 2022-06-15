@@ -4,9 +4,8 @@
 
 struct estruturaCandidato
 {
-    int numeroCandidato;
     char nomeCandidato[tamanhoNome];
-    int numeroVotos;
+    int numeroCandidato, numeroVotos;
     struct estruturaCandidato *prox;
 };
 
@@ -17,7 +16,7 @@ void adicionarCandidato(celula *p)
     int numeroCandidato;
     celula *nova;
 
-    nova = (celula*)malloc(sizeof(celula));
+    nova = malloc(sizeof(celula));
 
     printf("\nNome do Candidato: ");
     getchar();
@@ -37,7 +36,7 @@ void alterarCandidato(int y, celula *le)
 {
     int numeroCandidato;
     celula *p, *q, *nova;
-    nova = (celula*)malloc(sizeof(celula));
+    nova = malloc(sizeof(celula));
     /* Logica dados novos aqui */
 
     printf("\nNome do Candidato: ");
@@ -108,10 +107,10 @@ void crudCandidato(celula *p)
     scanf("%d", &seletor);
     switch (seletor)
     {
-    	
+
     case 0:
-        break;	
-    	
+        break;
+
     case 1:
         adicionarCandidato(p);
         crudCandidato(p);
@@ -128,7 +127,7 @@ void crudCandidato(celula *p)
         break;
 
     default:
-    	printf("Numero invalido!\n");
+        printf("Numero invalido!\n");
         break;
     }
 }
@@ -141,8 +140,8 @@ void menuCandidato(celula *presidente, celula *governador, celula *senador)
     switch (seletor)
     {
     case 0:
-    	break;
-    	
+        break;
+
     case 1:
         crudCandidato(presidente);
         menuCandidato(presidente, governador, senador);
@@ -157,9 +156,9 @@ void menuCandidato(celula *presidente, celula *governador, celula *senador)
         break;
 
     default:
-    	printf("Numero invalido!");
-    	 break;
-	}
+        printf("Numero invalido!");
+        break;
+    }
 }
 
 // Função para mostrar os candidatos.
@@ -177,9 +176,10 @@ void imprime(celula *le)
 void votarCandidato(celula *le) // Utilizar um if para verificar se tem um candidato
 {
     // Botão para sair da função
-    celula *p, *q;
+    celula *p, *q, *lista;
     int voto;
-    imprime(le);
+    lista = le;
+    imprime(lista);
 
     printf("Digite aqui seu voto para Presidente\n");
     scanf("%d", &voto);
@@ -206,38 +206,51 @@ void votar(celula *presidente, celula *governador, celula *senador)
     votarCandidato(senador);
 }
 
-int contarVotos(celula *le)
+void imprimeRelatorio(celula *le, int votosTotais)
 {
+    float porcentagem;
     le = le->prox;
     if (le != NULL)
     {
-        return le->numeroVotos + contarVotos(le);
+        porcentagem = (le->numeroVotos * 100) / votosTotais;
+        printf("\nNome Candidato: %s", le->nomeCandidato);
+        printf("\nNumero Candidato: %d", le->numeroCandidato);
+        printf("\nPorcentagem de votos: %.2f %c\n", porcentagem, 37);
     }
+    if (le->prox != NULL)
+    {
+        imprimeRelatorio(le, votosTotais);
+    }
+}
+
+int contarVotos(celula *le)
+{
+    le = le->prox;
+    int totalVotos = 0;
+    for (celula *p = le; p!=NULL; p = p->prox)
+    {
+        totalVotos+=p->numeroVotos;
+    }
+    
+    return totalVotos;
 }
 
 void relatorioGeral(celula *le)
 {
-    celula *p;
-    double porcentagem;
-    int votosTotais = contarVotos(le);
-    if (votosTotais > 0)
-    {
-        printf("\n\nTotal de votos: %d", votosTotais);
-    }
-    for (p = le->prox; p != NULL; p = p->prox)
-    {
-        porcentagem = (p->numeroVotos * 100) / votosTotais;
-        printf("\nNome Candidato: %s", p->nomeCandidato);
-        printf("\nNumero Candidato: %d", p->numeroCandidato);
-        // FIXME Concerte a porcentagem
-        printf("\nPorcentagem de votos: %.2f %c\n", porcentagem, 37);
-    }
+    celula *p, *q;
+    p = le, q = le;
+    int votosTotais = contarVotos(p);
+    printf("\n\nTotal de votos: %d", votosTotais);
+    imprimeRelatorio(q, votosTotais);
 }
 
 void relatorio(celula *presidente, celula *governador, celula *senador)
 {
+    printf("\n\n\t\t--Relatorio Presidente--\n\n");
     relatorioGeral(presidente);
+    printf("\n\n\t\t--Relatorio Governador--\n\n");
     relatorioGeral(governador);
+    printf("\n\n\t\t--Relatorio Senador--\n\n");
     relatorioGeral(senador);
 }
 
@@ -248,7 +261,8 @@ void menu(celula *presidente, celula *governador, celula *senador)
     scanf("%d", &seletor);
     switch (seletor)
     {
-    	case 0:
+    case 0:
+        relatorio(presidente, governador, senador);
         break;
     case 1:
         menuCandidato(presidente, governador, senador);
@@ -268,9 +282,9 @@ void menu(celula *presidente, celula *governador, celula *senador)
 
 int main()
 {
-    celula *presidente = (celula*)malloc(sizeof(celula));
-    celula *governador = (celula*)malloc(sizeof(celula));
-    celula *senador = (celula*)malloc(sizeof(celula));
+    celula *presidente = malloc(sizeof(celula));
+    celula *governador = malloc(sizeof(celula));
+    celula *senador = malloc(sizeof(celula));
     presidente->prox = NULL;
     governador->prox = NULL;
     senador->prox = NULL;
