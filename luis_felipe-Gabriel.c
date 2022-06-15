@@ -173,6 +173,16 @@ void imprime(celula *le)
     }
 }
 
+celula *
+busca(int x, celula *le)
+{
+    celula *p;
+    p = le;
+    while (p != NULL && p->numeroCandidato != x)
+        p = p->prox;
+    return p;
+}
+
 void votarCandidato(celula *le) // Utilizar um if para verificar se tem um candidato
 {
     // Botão para sair da função
@@ -184,18 +194,12 @@ void votarCandidato(celula *le) // Utilizar um if para verificar se tem um candi
     printf("Digite aqui seu voto para Presidente\n");
     scanf("%d", &voto);
 
-    p = le;
+    p = busca(voto, le);
     q = le->prox;
-    while (q != NULL)
+    if (voto == p->numeroCandidato)
     {
-
-        if (voto == p->numeroCandidato)
-        {
-            printf("Seu voto foi para %s\n", p->nomeCandidato);
-            p->numeroVotos++;
-        }
-        p = q;
-        q = q->prox;
+        printf("Seu voto foi para %s\n", p->nomeCandidato);
+        p->numeroVotos++;
     }
 }
 
@@ -227,11 +231,11 @@ int contarVotos(celula *le)
 {
     le = le->prox;
     int totalVotos = 0;
-    for (celula *p = le; p!=NULL; p = p->prox)
+    for (celula *p = le; p != NULL; p = p->prox)
     {
-        totalVotos+=p->numeroVotos;
+        totalVotos += p->numeroVotos;
     }
-    
+
     return totalVotos;
 }
 
